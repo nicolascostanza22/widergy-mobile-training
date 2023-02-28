@@ -90,12 +90,13 @@ function Calculator({navigation, route}): JSX.Element {
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity
+        style={styles.backButton}
         onPress={() => {
           const routesToShow = route.params?.routesToShow || [];
           routesToShow.push({screen: 'Home', id: routesToShow.length + 1});
           navigation.navigate('History', {routesToShow});
         }}>
-        <Text>Historial</Text>
+        <Text style={styles.textGoBack}>Historial</Text>
       </TouchableOpacity>
       <View style={styles.header}>
         <Text
@@ -112,10 +113,6 @@ function Calculator({navigation, route}): JSX.Element {
     </SafeAreaView>
   );
 }
-
-// color violecta ---> #966BDE
-// color fondo de la calculadora ---> #434748
-// color para las letras es blanco en hexa
 
 const styles = StyleSheet.create({
   container: {
@@ -144,6 +141,22 @@ const styles = StyleSheet.create({
   resultContainer: {
     marginTop: 20,
     marginHorizontal: 10,
+  },
+  backButton: {
+    backgroundColor: '#966BDE',
+    height: 40,
+    width: '80%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: '10%',
+    borderRadius: 50,
+    marginBottom: 10,
+    marginTop: 15,
+  },
+  textGoBack: {
+    color: '#FFF',
+    fontSize: 18,
   },
 });
 
