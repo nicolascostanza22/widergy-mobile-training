@@ -79,13 +79,6 @@ function App(): JSX.Element {
     }
   }, [result]);
 
-  console.log({
-    firstNumber,
-    secondNumber,
-    operation,
-    result,
-  });
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
