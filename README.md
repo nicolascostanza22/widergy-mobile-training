@@ -1,4 +1,4 @@
-# * Widergy-1-calculador
+# * Master (ejercicio 1)
 
 Calculadora
 
