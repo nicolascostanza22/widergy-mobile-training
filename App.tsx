@@ -79,13 +79,6 @@ function App(): JSX.Element {
     }
   }, [result]);
 
-  console.log({
-    firstNumber,
-    secondNumber,
-    operation,
-    result,
-  });
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -103,10 +96,6 @@ function App(): JSX.Element {
     </SafeAreaView>
   );
 }
-
-// color violecta ---> #966BDE
-// color fondo de la calculadora ---> #434748
-// color para las letras es blanco en hexa
 
 const styles = StyleSheet.create({
   container: {
