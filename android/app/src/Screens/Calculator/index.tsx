@@ -1,4 +1,3 @@
-import {useNavigationState} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
@@ -10,7 +9,12 @@ import {
 } from 'react-native';
 import Keyboard from '../../components/Keyboard';
 
-function Calculator({navigation, route}): JSX.Element {
+interface Props {
+  navigation: any;
+  route: any;
+}
+
+function Calculator({navigation, route}: Props): JSX.Element {
   const [firstNumber, setFirstNumber] = useState<string>('');
   const [secondNumber, setSecondNumber] = useState<string>('');
   const [operation, setOperation] = useState<string>('');
