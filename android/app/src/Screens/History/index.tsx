@@ -1,28 +1,58 @@
 import {View, Text, FlatList, StyleSheet} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Row from '../../components/Row';
+import {
+  deleteAllExpressions,
+  deleteExpression,
+  editExpression,
+  getExpressions,
+} from '../../Redux/Calculadora/actions';
+import {CalculatorState} from '../../Redux/Calculadora/types';
 
-const HistoryRoutes = ({route, navigation}) => {
-  const routesToShow = route.params?.routesToShow || [];
+interface Props {
+  navigation: any;
+  calculator: CalculatorState;
+  dispatch: any;
+}
+
+const HistoryExpresssions = ({navigation, calculator, dispatch}: Props) => {
+  useEffect(() => {
+    dispatch(getExpressions());
+  }, [dispatch]);
+
+  const handleAction = (id: string, type: string, data?: string) => {
+    if (type === 'editar' && data) {
+      dispatch(editExpression(id, data));
+    } else {
+      dispatch(deleteExpression(id));
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Historial</Text>
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => {
-          routesToShow.push({screen: 'Historial', id: routesToShow.length + 1});
-          navigation.navigate('Home', {routesToShow});
+          dispatch(deleteAllExpressions());
         }}>
-        <Text style={styles.textGoBack}>Volver a Home</Text>
+        <Text style={styles.textGoBack}>Borrar Todo</Text>
       </TouchableOpacity>
       <FlatList
-        data={routesToShow}
+        data={calculator.expressions || []}
         renderItem={({item, index}) => (
-          <Row key={index} routeToShow={item.screen} />
+          <Row key={index} handleAction={handleAction} expression={item} />
         )}
         keyExtractor={item => item.id}
       />
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => {
+          navigation.navigate('Home');
+        }}>
+        <Text style={styles.textGoBack}>Calculadora</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -55,4 +85,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HistoryRoutes;
+export default HistoryExpresssions;

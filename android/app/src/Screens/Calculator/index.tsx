@@ -8,17 +8,24 @@ import {
   View,
 } from 'react-native';
 import Keyboard from '../../components/Keyboard';
+import {addExpression} from '../../Redux/Calculadora/actions';
 
 interface Props {
   navigation: any;
-  route: any;
+  calculator: any;
+  dispatch: any;
 }
 
-function Calculator({navigation, route}: Props): JSX.Element {
+function Calculator({navigation, calculator, dispatch}: Props): JSX.Element {
   const [firstNumber, setFirstNumber] = useState<string>('');
   const [secondNumber, setSecondNumber] = useState<string>('');
   const [operation, setOperation] = useState<string>('');
   const [result, setResult] = useState<number>(0);
+  const [expression, setExpression] = useState('');
+  console.log('count, dispatch', {
+    calculator,
+    dispatch,
+  });
 
   const handleOnPress = (toShow: string, isOperation: boolean) => {
     switch (toShow) {
@@ -65,6 +72,7 @@ function Calculator({navigation, route}: Props): JSX.Element {
   };
 
   const getResult = () => {
+    setExpression(`${firstNumber} ${operation} ${secondNumber} = ${result}`);
     switch (operation) {
       case '+':
         setResult(parseFloat(firstNumber) + parseFloat(secondNumber));
@@ -95,12 +103,15 @@ function Calculator({navigation, route}: Props): JSX.Element {
     <SafeAreaView style={styles.container}>
       <TouchableOpacity
         style={styles.backButton}
-        onPress={() => {
-          const routesToShow = route.params?.routesToShow || [];
-          routesToShow.push({screen: 'Home', id: routesToShow.length + 1});
-          navigation.navigate('History', {routesToShow});
-        }}>
-        <Text style={styles.textGoBack}>Historial</Text>
+        onPress={() =>
+          dispatch(
+            addExpression({
+              id: Math.random().toString(),
+              expression,
+            }),
+          )
+        }>
+        <Text style={styles.textGoBack}>Guardar</Text>
       </TouchableOpacity>
       <View style={styles.header}>
         <Text
@@ -114,6 +125,13 @@ function Calculator({navigation, route}: Props): JSX.Element {
         </ScrollView>
       </View>
       <Keyboard handleOnPress={handleOnPress} />
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => {
+          navigation.navigate('History');
+        }}>
+        <Text style={styles.textGoBack}>Historial</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -156,7 +174,7 @@ const styles = StyleSheet.create({
     marginHorizontal: '10%',
     borderRadius: 50,
     marginBottom: 10,
-    marginTop: 15,
+    marginVertical: 10,
   },
   textGoBack: {
     color: '#FFF',
