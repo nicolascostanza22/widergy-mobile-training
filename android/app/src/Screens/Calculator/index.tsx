@@ -22,10 +22,6 @@ function Calculator({navigation, calculator, dispatch}: Props): JSX.Element {
   const [operation, setOperation] = useState<string>('');
   const [result, setResult] = useState<number>(0);
   const [expression, setExpression] = useState('');
-  console.log('count, dispatch', {
-    calculator,
-    dispatch,
-  });
 
   const handleOnPress = (toShow: string, isOperation: boolean) => {
     switch (toShow) {
