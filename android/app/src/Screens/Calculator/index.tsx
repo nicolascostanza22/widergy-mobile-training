@@ -12,16 +12,27 @@ import {addExpression} from '../../Redux/Calculadora/actions';
 
 interface Props {
   navigation: any;
-  calculator: any;
   dispatch: any;
 }
 
-function Calculator({navigation, calculator, dispatch}: Props): JSX.Element {
+function Calculator({navigation, dispatch}: Props): JSX.Element {
   const [firstNumber, setFirstNumber] = useState<string>('');
   const [secondNumber, setSecondNumber] = useState<string>('');
   const [operation, setOperation] = useState<string>('');
   const [result, setResult] = useState<number>(0);
   const [expression, setExpression] = useState('');
+
+  useEffect(() => {
+    if (result && secondNumber) {
+      setExpression(`${firstNumber} ${operation} ${secondNumber} = ${result}`);
+    }
+    if (result) {
+      setFirstNumber(result.toString());
+      setSecondNumber('');
+      setOperation('');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [result]);
 
   const handleOnPress = (toShow: string, isOperation: boolean) => {
     switch (toShow) {
@@ -68,7 +79,6 @@ function Calculator({navigation, calculator, dispatch}: Props): JSX.Element {
   };
 
   const getResult = () => {
-    setExpression(`${firstNumber} ${operation} ${secondNumber} = ${result}`);
     switch (operation) {
       case '+':
         setResult(parseFloat(firstNumber) + parseFloat(secondNumber));
@@ -87,26 +97,18 @@ function Calculator({navigation, calculator, dispatch}: Props): JSX.Element {
     }
   };
 
-  useEffect(() => {
-    if (result) {
-      setFirstNumber(result.toString());
-      setSecondNumber('');
-      setOperation('');
-    }
-  }, [result]);
-
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity
         style={styles.backButton}
-        onPress={() =>
+        onPress={() => {
           dispatch(
             addExpression({
               id: Math.random().toString(),
               expression,
             }),
-          )
-        }>
+          );
+        }}>
         <Text style={styles.textGoBack}>Guardar</Text>
       </TouchableOpacity>
       <View style={styles.header}>

@@ -4,11 +4,11 @@ import {action} from 'typesafe-actions';
 export const getExpressions = () =>
   action(TYPES.CalculatorActionsConst.GET_EXPRESSIONS);
 
-export const addExpression = (data: {id: string; expression: string}) =>
+export const addExpression = (data: TYPES.Expression) =>
   action(TYPES.CalculatorActionsConst.ADD_EXPRESSION, data);
 
-export const editExpression = (id: string, data: string) =>
-  action(TYPES.CalculatorActionsConst.EDIT_EXPRESSION, id, data);
+export const editExpression = (data: TYPES.Expression) =>
+  action(TYPES.CalculatorActionsConst.EDIT_EXPRESSION, data);
 
 export const deleteExpression = (id: string) =>
   action(TYPES.CalculatorActionsConst.DELETE_EXPRESSION, id);

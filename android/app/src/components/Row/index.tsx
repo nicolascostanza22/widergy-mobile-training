@@ -12,10 +12,15 @@ import {Expression} from '../../Redux/Calculadora/types';
 
 interface Props {
   expression: Expression;
-  handleAction: (id: string, type: string, data?: string) => void;
+  handleEdit: (data: Expression) => void;
+  handleDelete: (id: string) => void;
 }
 
-const Row: React.FC<Props> = ({expression: {expression, id}, handleAction}) => {
+const Row: React.FC<Props> = ({
+  expression: {expression, id},
+  handleEdit,
+  handleDelete,
+}) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(true);
   const [newExpression, setNewExpression] = useState<string>('');
@@ -26,21 +31,35 @@ const Row: React.FC<Props> = ({expression: {expression, id}, handleAction}) => {
           <Text style={[styles.text, styles.title]}>
             {isEditing ? 'Editar' : 'Eliminar'}
           </Text>
-          <TextInput
-            placeholderTextColor={'#FFF'}
-            style={styles.text}
-            onChangeText={setNewExpression}
-            value={newExpression}
-            placeholder={expression}
-            keyboardType="numeric"
-          />
+          <View style={styles.modalMessage}>
+            {isEditing ? (
+              <Text style={styles.text}>Expresion previa {expression}</Text>
+            ) : (
+              <>
+                <Text style={styles.text}>
+                  Seguro que desea eliminar la expresion
+                </Text>
+                <Text style={[styles.text, styles.expression]}>
+                  {expression}
+                </Text>
+              </>
+            )}
+            {isEditing && (
+              <TextInput
+                placeholderTextColor={'#FFF'}
+                style={[styles.text, styles.inputExpression]}
+                onChangeText={setNewExpression}
+                value={newExpression}
+              />
+            )}
+          </View>
           <View style={styles.buttons}>
             <TouchableOpacity
               style={styles.actionButtons}
               onPress={() => {
                 isEditing
-                  ? handleAction(id, 'editar', newExpression)
-                  : handleAction(id, 'eliminar');
+                  ? handleEdit({id, expression: newExpression})
+                  : handleDelete(id);
                 setShowModal(false);
               }}>
               <Text style={styles.text}>
@@ -134,6 +153,17 @@ const styles = StyleSheet.create({
     marginHorizontal: '10%',
     borderRadius: 50,
     marginBottom: 10,
+  },
+  modalMessage: {
+    marginHorizontal: 10,
+  },
+  expression: {
+    paddingTop: 5,
+    textAlign: 'center',
+  },
+  inputExpression: {
+    borderBottomColor: '#FFF',
+    borderBottomWidth: 1,
   },
 });
 

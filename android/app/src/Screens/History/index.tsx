@@ -8,7 +8,7 @@ import {
   editExpression,
   getExpressions,
 } from '../../Redux/Calculadora/actions';
-import {CalculatorState} from '../../Redux/Calculadora/types';
+import {CalculatorState, Expression} from '../../Redux/Calculadora/types';
 
 interface Props {
   navigation: any;
@@ -21,12 +21,12 @@ const HistoryExpresssions = ({navigation, calculator, dispatch}: Props) => {
     dispatch(getExpressions());
   }, [dispatch]);
 
-  const handleAction = (id: string, type: string, data?: string) => {
-    if (type === 'editar' && data) {
-      dispatch(editExpression(id, data));
-    } else {
-      dispatch(deleteExpression(id));
-    }
+  const handleEdit = (data: Expression) => {
+    dispatch(editExpression(data));
+  };
+
+  const handleDelete = (id: string) => {
+    dispatch(deleteExpression(id));
   };
 
   return (
@@ -42,7 +42,12 @@ const HistoryExpresssions = ({navigation, calculator, dispatch}: Props) => {
       <FlatList
         data={calculator.expressions || []}
         renderItem={({item, index}) => (
-          <Row key={index} handleAction={handleAction} expression={item} />
+          <Row
+            key={index}
+            handleEdit={handleEdit}
+            handleDelete={handleDelete}
+            expression={item}
+          />
         )}
         keyExtractor={item => item.id}
       />

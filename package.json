@@ -21,7 +21,7 @@
     "react-native-svg": "^13.8.0",
     "react-redux": "^8.0.5",
     "redux": "^4.2.1",
-    "typesafe-actions": "^5.1.0",
+    "typesafe-actions": "^5.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

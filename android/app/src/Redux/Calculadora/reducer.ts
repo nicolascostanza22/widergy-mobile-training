@@ -1,5 +1,5 @@
 import {initialState} from './initialState';
-import {CalculatorActionsConst} from './types';
+import {CalculatorActionsConst, Expression} from './types';
 
 const reducer = (state: any = initialState, action: any) => {
   switch (action.type) {
@@ -8,16 +8,31 @@ const reducer = (state: any = initialState, action: any) => {
         ...state,
       };
     case CalculatorActionsConst.ADD_EXPRESSION:
-      console.log('bien', state, action.payload);
-      return state;
+      return {
+        ...state,
+        expressions: [action.payload, ...state.expressions],
+      };
     case CalculatorActionsConst.EDIT_EXPRESSION:
-      return state;
+      return {
+        ...state,
+        expressions: state.expressions.map((exp: Expression) =>
+          exp.id === action.payload.id ? action.payload : exp,
+        ),
+      };
     case CalculatorActionsConst.DELETE_EXPRESSION:
-      return state;
+      return {
+        ...state,
+        expressions: state.expressions.filter(
+          (exp: Expression) => exp.id !== action.payload,
+        ),
+      };
     case CalculatorActionsConst.DELETE_ALL_EXPRESSION:
-      return state;
+      return {
+        ...state,
+        expressions: [],
+      };
     default:
-      return state;
+      return {...state};
   }
 };
 
