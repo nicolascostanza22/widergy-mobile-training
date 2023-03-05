@@ -8,19 +8,22 @@ import {
   View,
 } from 'react-native';
 import Keyboard from '../../components/Keyboard';
-import {addExpression} from '../../Redux/Calculadora/actions';
+import {addExpression} from '../../Redux/Calculadora/thunks';
+import {CalculatorState} from '../../Redux/Calculadora/types';
 
 interface Props {
   navigation: any;
   dispatch: any;
+  calculator: CalculatorState;
 }
 
-function Calculator({navigation, dispatch}: Props): JSX.Element {
+function Calculator({navigation, calculator, dispatch}: Props): JSX.Element {
   const [firstNumber, setFirstNumber] = useState<string>('');
   const [secondNumber, setSecondNumber] = useState<string>('');
   const [operation, setOperation] = useState<string>('');
   const [result, setResult] = useState<number>(0);
-  const [expression, setExpression] = useState('');
+  const [expression, setExpression] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
 
   useEffect(() => {
     if (result && secondNumber) {
@@ -97,20 +100,32 @@ function Calculator({navigation, dispatch}: Props): JSX.Element {
     }
   };
 
+  const onSave = async () => {
+    try {
+      await dispatch(
+        addExpression({
+          id: Math.random().toString(),
+          expression,
+        }),
+      );
+      setMessage(calculator.message);
+      setTimeout(() => {
+        setMessage('');
+      }, 3000);
+    } catch (error) {
+      setMessage('Ocurrio un error');
+      setTimeout(() => {
+        setMessage('');
+      }, 3000);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => {
-          dispatch(
-            addExpression({
-              id: Math.random().toString(),
-              expression,
-            }),
-          );
-        }}>
+      <TouchableOpacity style={styles.backButton} onPress={() => onSave()}>
         <Text style={styles.textGoBack}>Guardar</Text>
       </TouchableOpacity>
+      <Text>{message}</Text>
       <View style={styles.header}>
         <Text
           style={

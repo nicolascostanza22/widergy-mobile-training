@@ -1,35 +1,36 @@
 import {initialState} from './initialState';
-import {CalculatorActionsConst, Expression} from './types';
+import {CalculatorActionsConst} from './types';
 
 const reducer = (state: any = initialState, action: any) => {
   switch (action.type) {
-    case CalculatorActionsConst.GET_EXPRESSIONS:
+    case CalculatorActionsConst.GET_EXPRESSIONS_FETCHING:
+    case CalculatorActionsConst.ADD_EXPRESSION_FETCHING:
+    case CalculatorActionsConst.EDIT_EXPRESSION_FETCHING:
+    case CalculatorActionsConst.DELETE_EXPRESSION_FETCHING:
       return {
         ...state,
+        isFetching: true,
+        message: '',
       };
-    case CalculatorActionsConst.ADD_EXPRESSION:
+    case CalculatorActionsConst.GET_EXPRESSIONS_FULLFILED:
       return {
         ...state,
-        expressions: [action.payload, ...state.expressions],
+        expressions: action.payload,
+        isFetching: false,
       };
-    case CalculatorActionsConst.EDIT_EXPRESSION:
+    case CalculatorActionsConst.ADD_EXPRESSION_FULLFILED:
+    case CalculatorActionsConst.EDIT_EXPRESSION_FULLFILED:
+    case CalculatorActionsConst.DELETE_EXPRESSION_FULLFILED:
+    case CalculatorActionsConst.GET_EXPRESSIONS_REJECTED:
+    case CalculatorActionsConst.ADD_EXPRESSION_REJECTED:
+    case CalculatorActionsConst.EDIT_EXPRESSION_REJECTED:
+    case CalculatorActionsConst.DELETE_EXPRESSION_REJECTED:
+      console.log('payload REDUCER ', action.payload);
+      console.log('payload message reducer ', action.payload.message);
       return {
         ...state,
-        expressions: state.expressions.map((exp: Expression) =>
-          exp.id === action.payload.id ? action.payload : exp,
-        ),
-      };
-    case CalculatorActionsConst.DELETE_EXPRESSION:
-      return {
-        ...state,
-        expressions: state.expressions.filter(
-          (exp: Expression) => exp.id !== action.payload,
-        ),
-      };
-    case CalculatorActionsConst.DELETE_ALL_EXPRESSION:
-      return {
-        ...state,
-        expressions: [],
+        message: action.payload.message,
+        isFetching: false,
       };
     default:
       return {...state};

@@ -1,14 +1,13 @@
 import {View, Text, FlatList, StyleSheet} from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Row from '../../components/Row';
+import {CalculatorState} from '../../Redux/Calculadora/types';
 import {
-  deleteAllExpressions,
   deleteExpression,
   editExpression,
   getExpressions,
-} from '../../Redux/Calculadora/actions';
-import {CalculatorState, Expression} from '../../Redux/Calculadora/types';
+} from '../../Redux/Calculadora/thunks';
 
 interface Props {
   navigation: any;
@@ -17,28 +16,48 @@ interface Props {
 }
 
 const HistoryExpresssions = ({navigation, calculator, dispatch}: Props) => {
+  const [message, setMessage] = useState<string>('');
+
+  console.log('calculator history', calculator);
+
   useEffect(() => {
     dispatch(getExpressions());
   }, [dispatch]);
 
-  const handleEdit = (data: Expression) => {
-    dispatch(editExpression(data));
+  const handleEdit = async (id: string, data: string) => {
+    try {
+      await dispatch(editExpression(id, data));
+      setMessage(calculator.message);
+      setTimeout(() => {
+        setMessage('');
+      }, 3000);
+    } catch (error) {
+      setMessage('Ocurrio un error');
+      setTimeout(() => {
+        setMessage('');
+      }, 3000);
+    }
   };
 
-  const handleDelete = (id: string) => {
-    dispatch(deleteExpression(id));
+  const handleDelete = async (id: string) => {
+    try {
+      await dispatch(deleteExpression(id));
+      setMessage(calculator.message);
+      setTimeout(() => {
+        setMessage('');
+      }, 3000);
+    } catch (error) {
+      setMessage('Ocurrio un error');
+      setTimeout(() => {
+        setMessage('');
+      }, 3000);
+    }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Historial</Text>
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => {
-          dispatch(deleteAllExpressions());
-        }}>
-        <Text style={styles.textGoBack}>Borrar Todo</Text>
-      </TouchableOpacity>
+      <Text>{message}</Text>
       <FlatList
         data={calculator.expressions || []}
         renderItem={({item, index}) => (

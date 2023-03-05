@@ -12,7 +12,7 @@ import {Expression} from '../../Redux/Calculadora/types';
 
 interface Props {
   expression: Expression;
-  handleEdit: (data: Expression) => void;
+  handleEdit: (id: string, data: string) => void;
   handleDelete: (id: string) => void;
 }
 
@@ -57,9 +57,7 @@ const Row: React.FC<Props> = ({
             <TouchableOpacity
               style={styles.actionButtons}
               onPress={() => {
-                isEditing
-                  ? handleEdit({id, expression: newExpression})
-                  : handleDelete(id);
+                isEditing ? handleEdit(id, newExpression) : handleDelete(id);
                 setShowModal(false);
               }}>
               <Text style={styles.text}>

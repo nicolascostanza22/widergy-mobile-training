@@ -17,6 +17,10 @@ function App(): JSX.Element {
     calculator: state.calculator,
   }))(HistoryExpresssions);
 
+  // import('./android/app/config/ReactotronConfig').then(() =>
+  //   console.log('Reactotron Configured'),
+  // );
+
   return (
     <Provider store={store}>
       <NavigationContainer>
