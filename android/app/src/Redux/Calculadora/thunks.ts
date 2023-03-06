@@ -31,9 +31,6 @@ export const editExpression =
         `/expressions/${id}`,
         expression,
       );
-      console.log('response ? ', JSON.parse(response));
-      console.log('RESPONSE API', response.data.message);
-
       return dispatch(ACTIONS.editExpressionFullfiled(response.data));
     } catch (error: any) {
       return dispatch(ACTIONS.editExpressionRejected('Hubo un error'));

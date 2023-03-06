@@ -18,19 +18,23 @@ interface Props {
 const HistoryExpresssions = ({navigation, calculator, dispatch}: Props) => {
   const [message, setMessage] = useState<string>('');
 
-  console.log('calculator history', calculator);
-
   useEffect(() => {
     dispatch(getExpressions());
   }, [dispatch]);
 
-  const handleEdit = async (id: string, data: string) => {
-    try {
-      await dispatch(editExpression(id, data));
+  useEffect(() => {
+    if (calculator.message) {
       setMessage(calculator.message);
       setTimeout(() => {
         setMessage('');
       }, 3000);
+    }
+  }, [calculator.message]);
+
+  const handleEdit = async (id: string, data: string) => {
+    try {
+      setMessage('Cargando...');
+      await dispatch(editExpression(id, data));
     } catch (error) {
       setMessage('Ocurrio un error');
       setTimeout(() => {
@@ -41,11 +45,8 @@ const HistoryExpresssions = ({navigation, calculator, dispatch}: Props) => {
 
   const handleDelete = async (id: string) => {
     try {
+      setMessage('Cargando...');
       await dispatch(deleteExpression(id));
-      setMessage(calculator.message);
-      setTimeout(() => {
-        setMessage('');
-      }, 3000);
     } catch (error) {
       setMessage('Ocurrio un error');
       setTimeout(() => {
@@ -57,7 +58,7 @@ const HistoryExpresssions = ({navigation, calculator, dispatch}: Props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Historial</Text>
-      <Text>{message}</Text>
+      <Text style={styles.responseMessage}>{message}</Text>
       <FlatList
         data={calculator.expressions || []}
         renderItem={({item, index}) => (
@@ -106,6 +107,12 @@ const styles = StyleSheet.create({
   textGoBack: {
     color: '#FFF',
     fontSize: 18,
+  },
+  responseMessage: {
+    color: '#FFF',
+    fontSize: 22,
+    textAlign: 'center',
+    width: '100%',
   },
 });
 

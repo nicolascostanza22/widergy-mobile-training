@@ -29,7 +29,8 @@ const reducer = (state: any = initialState, action: any) => {
       console.log('payload message reducer ', action.payload.message);
       return {
         ...state,
-        message: action.payload.message,
+        // message: action.payload.message,
+        message: 'Exito',
         isFetching: false,
       };
     default:

@@ -102,6 +102,7 @@ function Calculator({navigation, calculator, dispatch}: Props): JSX.Element {
 
   const onSave = async () => {
     try {
+      setMessage('Cargando...');
       await dispatch(
         addExpression({
           id: Math.random().toString(),
@@ -125,7 +126,7 @@ function Calculator({navigation, calculator, dispatch}: Props): JSX.Element {
       <TouchableOpacity style={styles.backButton} onPress={() => onSave()}>
         <Text style={styles.textGoBack}>Guardar</Text>
       </TouchableOpacity>
-      <Text>{message}</Text>
+      <Text style={[styles.responseMessage]}>{message}</Text>
       <View style={styles.header}>
         <Text
           style={
@@ -192,6 +193,12 @@ const styles = StyleSheet.create({
   textGoBack: {
     color: '#FFF',
     fontSize: 18,
+  },
+  responseMessage: {
+    color: '#FFF',
+    fontSize: 22,
+    textAlign: 'center',
+    width: '100%',
   },
 });
 
