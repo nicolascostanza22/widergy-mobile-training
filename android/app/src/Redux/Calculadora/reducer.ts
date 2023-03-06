@@ -25,12 +25,9 @@ const reducer = (state: any = initialState, action: any) => {
     case CalculatorActionsConst.ADD_EXPRESSION_REJECTED:
     case CalculatorActionsConst.EDIT_EXPRESSION_REJECTED:
     case CalculatorActionsConst.DELETE_EXPRESSION_REJECTED:
-      console.log('payload REDUCER ', action.payload);
-      console.log('payload message reducer ', action.payload.message);
       return {
         ...state,
-        // message: action.payload.message,
-        message: 'Exito',
+        message: action.payload.message,
         isFetching: false,
       };
     default:

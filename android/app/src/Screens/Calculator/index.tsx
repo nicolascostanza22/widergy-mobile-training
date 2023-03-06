@@ -37,6 +37,15 @@ function Calculator({navigation, calculator, dispatch}: Props): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result]);
 
+  useEffect(() => {
+    if (calculator.message) {
+      setMessage(calculator.message);
+      setTimeout(() => {
+        setMessage('');
+      }, 3000);
+    }
+  }, [calculator.message]);
+
   const handleOnPress = (toShow: string, isOperation: boolean) => {
     switch (toShow) {
       case '=':
@@ -109,10 +118,6 @@ function Calculator({navigation, calculator, dispatch}: Props): JSX.Element {
           expression,
         }),
       );
-      setMessage(calculator.message);
-      setTimeout(() => {
-        setMessage('');
-      }, 3000);
     } catch (error) {
       setMessage('Ocurrio un error');
       setTimeout(() => {

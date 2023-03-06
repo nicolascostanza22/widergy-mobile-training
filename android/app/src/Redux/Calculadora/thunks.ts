@@ -27,10 +27,9 @@ export const editExpression =
   (id: string, expression: string) => async (dispatch: any) => {
     dispatch(ACTIONS.editExpressionFetching());
     try {
-      const response: any = await instance.put(
-        `/expressions/${id}`,
+      const response: any = await instance.put(`/expressions/${id}`, {
         expression,
-      );
+      });
       return dispatch(ACTIONS.editExpressionFullfiled(response.data));
     } catch (error: any) {
       return dispatch(ACTIONS.editExpressionRejected('Hubo un error'));
