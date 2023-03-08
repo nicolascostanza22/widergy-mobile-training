@@ -10,9 +10,14 @@ const handleOnPress = (
   operation: string,
   setOperation: React.Dispatch<React.SetStateAction<string>>,
   setResult: React.Dispatch<React.SetStateAction<number>>,
+  setMessage: React.Dispatch<React.SetStateAction<string>>,
 ) => {
   switch (toShow) {
     case '=':
+      if (firstNumber[0] === '*' || firstNumber[0] === '/') {
+        setMessage('Expresion malformada');
+        break;
+      }
       if (operation && !secondNumber) {
         break;
       }
@@ -27,14 +32,16 @@ const handleOnPress = (
         secondNumber,
         setFirstNumber,
         setSecondNumber,
+        setMessage,
       );
-      cleanAfterResult(setFirstNumber, setSecondNumber, setOperation);
+      cleanAfterResult(setSecondNumber, setOperation);
       break;
     case 'AC':
       setFirstNumber('');
       setSecondNumber('');
       setOperation('');
       setResult(0);
+      setMessage('');
       break;
     case 'C':
       if (secondNumber) {
@@ -50,7 +57,10 @@ const handleOnPress = (
     case '+':
     case '/':
     case '*':
-      if (!operation) {
+      if (!firstNumber) {
+        setFirstNumber(toShow);
+      }
+      if (!operation && firstNumber && firstNumber !== toShow) {
         setOperation(toShow);
       }
       break;
@@ -60,6 +70,9 @@ const handleOnPress = (
       }
       if (!operation && firstNumber && firstNumber !== '-') {
         setOperation(toShow);
+      }
+      if (operation) {
+        setSecondNumber('-');
       }
       break;
     default:
@@ -73,6 +86,17 @@ const handleOnPress = (
   }
 };
 
+const formatDecimalResult = (resultado: number) => {
+  const text = resultado.toString();
+  const decimalPart = text.split('.')[1];
+  let resultDecimal: string;
+  if (decimalPart && decimalPart.length > 2) {
+    resultDecimal = decimalPart.slice(0, 2);
+    return `${text.split('.')[0]}.${resultDecimal}`;
+  }
+  return text;
+};
+
 const getResult = (
   operation: string,
   setResult: React.Dispatch<React.SetStateAction<number>>,
@@ -80,34 +104,52 @@ const getResult = (
   secondNumber: string,
   setFirstNumber: React.Dispatch<React.SetStateAction<string>>,
   setSecondNumber: React.Dispatch<React.SetStateAction<string>>,
+  setMessage: React.Dispatch<React.SetStateAction<string>>,
 ) => {
   switch (operation) {
     case '+':
-      setResult(parseFloat(firstNumber) + parseFloat(secondNumber));
+      setResult(
+        +formatDecimalResult(
+          parseFloat(firstNumber) + parseFloat(secondNumber),
+        ),
+      );
       setFirstNumber(
-        (parseFloat(firstNumber) + parseFloat(secondNumber)).toString(),
+        formatDecimalResult(parseFloat(firstNumber) + parseFloat(secondNumber)),
       );
       break;
     case '-':
-      setResult(parseFloat(firstNumber) - parseFloat(secondNumber));
+      setResult(
+        +formatDecimalResult(
+          parseFloat(firstNumber) - parseFloat(secondNumber),
+        ),
+      );
       setFirstNumber(
-        (parseFloat(firstNumber) - parseFloat(secondNumber)).toString(),
+        formatDecimalResult(parseFloat(firstNumber) - parseFloat(secondNumber)),
       );
       break;
     case '*':
-      setResult(parseFloat(firstNumber) * parseFloat(secondNumber));
+      setResult(
+        +formatDecimalResult(
+          parseFloat(firstNumber) * parseFloat(secondNumber),
+        ),
+      );
       setFirstNumber(
-        (parseFloat(firstNumber) * parseFloat(secondNumber)).toString(),
+        formatDecimalResult(parseFloat(firstNumber) * parseFloat(secondNumber)),
       );
       break;
     case '/':
       if (secondNumber === '0') {
         setSecondNumber('');
+        setMessage('No se puede dividir por cero');
         break;
       }
-      setResult(parseFloat(firstNumber) / parseFloat(secondNumber));
+      setResult(
+        +formatDecimalResult(
+          parseFloat(firstNumber) / parseFloat(secondNumber),
+        ),
+      );
       setFirstNumber(
-        (parseFloat(firstNumber) / parseFloat(secondNumber)).toString(),
+        formatDecimalResult(parseFloat(firstNumber) / parseFloat(secondNumber)),
       );
       break;
     default:
@@ -116,7 +158,6 @@ const getResult = (
 };
 
 const cleanAfterResult = (
-  setFirstNumber: React.Dispatch<React.SetStateAction<string>>,
   setSecondNumber: React.Dispatch<React.SetStateAction<string>>,
   setOperation: React.Dispatch<React.SetStateAction<string>>,
 ) => {

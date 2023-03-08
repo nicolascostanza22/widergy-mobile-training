@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
   result: {
     fontSize: 60,
     fontWeight: 'bold',
+    textAlign: 'right',
   },
   resultContainer: {
     marginTop: 20,

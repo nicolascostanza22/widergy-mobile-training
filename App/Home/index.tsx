@@ -7,6 +7,7 @@ import {handleOnPress} from './utils';
 function Home() {
   const [firstNumber, setFirstNumber] = useState<string>('');
   const [secondNumber, setSecondNumber] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
   const [operation, setOperation] = useState<string>('');
   const [result, setResult] = useState<number>(0);
 
@@ -21,6 +22,7 @@ function Home() {
       operation,
       setOperation,
       setResult,
+      setMessage,
     );
 
   return (
@@ -30,10 +32,11 @@ function Home() {
           style={
             styles.text
           }>{`${firstNumber} ${operation} ${secondNumber}`}</Text>
-        <ScrollView style={styles.resultContainer} horizontal={true}>
+        <ScrollView style={styles.resultContainer}>
           <Text numberOfLines={1} style={[styles.text, styles.result]}>
             {result}
           </Text>
+          <Text style={styles.text}>{message}</Text>
         </ScrollView>
       </View>
       <Keyboard handleOnPress={onPress} />
