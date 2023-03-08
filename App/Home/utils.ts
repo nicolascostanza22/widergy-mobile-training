@@ -1,3 +1,5 @@
+import styles from './styles';
+
 const handleOnPress = (
   toShow: string,
   isOperation: boolean,
@@ -14,7 +16,18 @@ const handleOnPress = (
       if (operation && !secondNumber) {
         break;
       }
-      getResult(operation, setResult, firstNumber, secondNumber);
+      if (firstNumber && !operation && !secondNumber) {
+        setResult(parseFloat(firstNumber));
+        break;
+      }
+      getResult(
+        operation,
+        setResult,
+        firstNumber,
+        secondNumber,
+        setFirstNumber,
+        setSecondNumber,
+      );
       cleanAfterResult(setFirstNumber, setSecondNumber, setOperation);
       break;
     case 'AC':
@@ -36,9 +49,16 @@ const handleOnPress = (
       break;
     case '+':
     case '/':
-    case '-':
     case '*':
       if (!operation) {
+        setOperation(toShow);
+      }
+      break;
+    case '-':
+      if (!firstNumber) {
+        setFirstNumber('-');
+      }
+      if (!operation && firstNumber && firstNumber !== '-') {
         setOperation(toShow);
       }
       break;
@@ -58,19 +78,37 @@ const getResult = (
   setResult: React.Dispatch<React.SetStateAction<number>>,
   firstNumber: string,
   secondNumber: string,
+  setFirstNumber: React.Dispatch<React.SetStateAction<string>>,
+  setSecondNumber: React.Dispatch<React.SetStateAction<string>>,
 ) => {
   switch (operation) {
     case '+':
       setResult(parseFloat(firstNumber) + parseFloat(secondNumber));
+      setFirstNumber(
+        (parseFloat(firstNumber) + parseFloat(secondNumber)).toString(),
+      );
       break;
     case '-':
       setResult(parseFloat(firstNumber) - parseFloat(secondNumber));
+      setFirstNumber(
+        (parseFloat(firstNumber) - parseFloat(secondNumber)).toString(),
+      );
       break;
     case '*':
       setResult(parseFloat(firstNumber) * parseFloat(secondNumber));
+      setFirstNumber(
+        (parseFloat(firstNumber) * parseFloat(secondNumber)).toString(),
+      );
       break;
     case '/':
+      if (secondNumber === '0') {
+        setSecondNumber('');
+        break;
+      }
       setResult(parseFloat(firstNumber) / parseFloat(secondNumber));
+      setFirstNumber(
+        (parseFloat(firstNumber) / parseFloat(secondNumber)).toString(),
+      );
       break;
     default:
       break;
@@ -82,7 +120,6 @@ const cleanAfterResult = (
   setSecondNumber: React.Dispatch<React.SetStateAction<string>>,
   setOperation: React.Dispatch<React.SetStateAction<string>>,
 ) => {
-  setFirstNumber('');
   setSecondNumber('');
   setOperation('');
 };
@@ -91,22 +128,12 @@ const BUTTONS = [
   {
     isOperation: true,
     toShow: 'C',
-    style: {
-      width: '45%',
-      paddingVertical: 10,
-      paddingHorizontal: 15,
-      backgroundColor: '#966BDE',
-    },
+    style: styles.bigButtonStyle,
   },
   {
     isOperation: true,
     toShow: 'AC',
-    style: {
-      width: '45%',
-      paddingVertical: 10,
-      paddingHorizontal: 15,
-      backgroundColor: '#966BDE',
-    },
+    style: styles.bigButtonStyle,
   },
   {
     isOperation: false,

@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import Colors from '../../Colors';
 
 const styles = StyleSheet.create({
   KeyboardContainer: {
@@ -8,7 +9,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#434748',
+    backgroundColor: Colors.ligthGray,
     marginBottom: 20,
     width: '100%',
   },

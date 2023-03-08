@@ -1,9 +1,10 @@
 import {StyleSheet} from 'react-native';
+import Colors from './Colors';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#434748',
+    backgroundColor: Colors.ligthGray,
   },
   header: {
     height: '25%',
@@ -18,7 +19,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 25,
-    color: '#FFF',
+    color: Colors.white,
   },
   result: {
     fontSize: 60,
@@ -27,6 +28,12 @@ const styles = StyleSheet.create({
   resultContainer: {
     marginTop: 20,
     marginHorizontal: 10,
+  },
+  bigButtonStyle: {
+    width: '45%',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    backgroundColor: Colors.violet,
   },
 });
 
