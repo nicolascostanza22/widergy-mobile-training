@@ -3,18 +3,21 @@ import {SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import styles from './styles';
 import Keyboard from '../../Shared-Components/Keyboard';
 import {handleOnPress} from './utils';
+import {useDispatch} from 'react-redux';
+import {addExpression} from '../../Redux/Calculator/actions';
 
 interface Props {
   navigation: any;
-  route: any;
 }
 
-function Home({navigation, route}: Props): JSX.Element {
+function Home({navigation}: Props): JSX.Element {
   const [firstNumber, setFirstNumber] = useState<string>('');
   const [secondNumber, setSecondNumber] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [operation, setOperation] = useState<string>('');
   const [result, setResult] = useState<number>(0);
+  const [expression, setExpression] = useState<string>('');
+  const dispatch = useDispatch();
 
   const onPress = (toShow: string, isOperation: boolean) =>
     handleOnPress(
@@ -28,6 +31,7 @@ function Home({navigation, route}: Props): JSX.Element {
       setOperation,
       setResult,
       setMessage,
+      setExpression,
     );
 
   return (
@@ -35,11 +39,14 @@ function Home({navigation, route}: Props): JSX.Element {
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => {
-          const routesToShow = route.params?.routesToShow || [];
-          routesToShow.push({screen: 'Home', id: routesToShow.length + 1});
-          navigation.navigate('History', {routesToShow});
+          dispatch(
+            addExpression({
+              id: Math.random().toString(),
+              expression,
+            }),
+          );
         }}>
-        <Text style={styles.textGoBack}>Historial</Text>
+        <Text style={styles.textGoBack}>Guardar</Text>
       </TouchableOpacity>
       <View style={styles.header}>
         <Text
@@ -54,6 +61,13 @@ function Home({navigation, route}: Props): JSX.Element {
         </View>
       </View>
       <Keyboard handleOnPress={onPress} />
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => {
+          navigation.navigate('History');
+        }}>
+        <Text style={styles.textGoBack}>Historial</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }

@@ -1,18 +1,19 @@
 import {StyleSheet} from 'react-native';
+import Colors from '../../Colors';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#434748',
+    backgroundColor: Colors.ligthGray,
   },
   title: {
     fontSize: 30,
     textAlign: 'center',
-    color: '#FFF',
+    color: Colors.white,
     paddingVertical: 10,
   },
   backButton: {
-    backgroundColor: '#966BDE',
+    backgroundColor: Colors.violet,
     height: 40,
     width: '80%',
     display: 'flex',
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   textGoBack: {
-    color: '#FFF',
+    color: Colors.white,
     fontSize: 18,
   },
   tableContainer: {
