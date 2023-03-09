@@ -1,10 +1,15 @@
 import React, {useState} from 'react';
-import {SafeAreaView, ScrollView, Text, View} from 'react-native';
+import {SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import styles from './styles';
-import Keyboard from './Components/Keyboard';
+import Keyboard from '../../Shared-Components/Keyboard';
 import {handleOnPress} from './utils';
 
-function Home() {
+interface Props {
+  navigation: any;
+  route: any;
+}
+
+function Home({navigation, route}: Props): JSX.Element {
   const [firstNumber, setFirstNumber] = useState<string>('');
   const [secondNumber, setSecondNumber] = useState<string>('');
   const [message, setMessage] = useState<string>('');
@@ -27,17 +32,26 @@ function Home() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => {
+          const routesToShow = route.params?.routesToShow || [];
+          routesToShow.push({screen: 'Home', id: routesToShow.length + 1});
+          navigation.navigate('History', {routesToShow});
+        }}>
+        <Text style={styles.textGoBack}>Historial</Text>
+      </TouchableOpacity>
       <View style={styles.header}>
         <Text
           style={
             styles.text
           }>{`${firstNumber} ${operation} ${secondNumber}`}</Text>
-        <ScrollView style={styles.resultContainer}>
+        <View style={styles.resultContainer}>
           <Text numberOfLines={1} style={[styles.text, styles.result]}>
             {result}
           </Text>
-          <Text style={styles.text}>{message}</Text>
-        </ScrollView>
+          <Text style={[styles.text, styles.errorMessage]}>{message}</Text>
+        </View>
       </View>
       <Keyboard handleOnPress={onPress} />
     </SafeAreaView>
