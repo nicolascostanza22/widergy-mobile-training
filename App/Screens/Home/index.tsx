@@ -9,7 +9,7 @@ interface Props {
   route: any;
 }
 
-function Calculator({navigation, route}: Props): JSX.Element {
+function Home({navigation, route}: Props): JSX.Element {
   const [firstNumber, setFirstNumber] = useState<string>('');
   const [secondNumber, setSecondNumber] = useState<string>('');
   const [message, setMessage] = useState<string>('');
@@ -58,4 +58,4 @@ function Calculator({navigation, route}: Props): JSX.Element {
   );
 }
 
-export default Calculator;
+export default Home;
