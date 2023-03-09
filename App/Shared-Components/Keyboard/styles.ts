@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.ligthGray,
     marginBottom: 20,
     width: '100%',
+    paddingBottom: 20,
   },
 });
 
