@@ -34,18 +34,22 @@ function Home({navigation}: Props): JSX.Element {
       setExpression,
     );
 
+  const onPressHistory = () => {
+    navigation.navigate('History');
+  };
+
+  const onPressSave = () => {
+    dispatch(
+      addExpression({
+        id: Math.random().toString(),
+        expression,
+      }),
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => {
-          dispatch(
-            addExpression({
-              id: Math.random().toString(),
-              expression,
-            }),
-          );
-        }}>
+      <TouchableOpacity style={styles.backButton} onPress={onPressSave}>
         <Text style={styles.textGoBack}>Guardar</Text>
       </TouchableOpacity>
       <View style={styles.header}>
@@ -61,11 +65,7 @@ function Home({navigation}: Props): JSX.Element {
         </View>
       </View>
       <Keyboard handleOnPress={onPress} />
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => {
-          navigation.navigate('History');
-        }}>
+      <TouchableOpacity style={styles.backButton} onPress={onPressHistory}>
         <Text style={styles.textGoBack}>Historial</Text>
       </TouchableOpacity>
     </SafeAreaView>
