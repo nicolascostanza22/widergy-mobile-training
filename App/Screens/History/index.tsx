@@ -1,36 +1,56 @@
 import {View, Text, FlatList} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Row from '../../Shared-Components/Row/index';
 import styles from './styles';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  deleteAllExpressions,
+  getExpressions,
+} from '../../Redux/Calculator/actions';
+import {handleDelete, handleEdit} from './utils';
 
 interface Props {
-  route: any;
   navigation: any;
 }
 
-const HistoryRoutes = ({route, navigation}: Props) => {
-  const routesToShow = route.params?.routesToShow || [];
+const HistoryRoutes = ({navigation}: Props) => {
+  const dispatch = useDispatch();
+  const expressions = useSelector((state: any) => state.calculator.expressions);
+
+  useEffect(() => {
+    dispatch(getExpressions());
+  }, [dispatch]);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Historial</Text>
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => {
-          routesToShow.push({screen: 'Historial', id: routesToShow.length + 1});
-          navigation.navigate('Home', {routesToShow});
+          dispatch(deleteAllExpressions());
         }}>
-        <Text style={styles.textGoBack}>Volver a Home</Text>
+        <Text style={styles.textGoBack}>Borrar Todo</Text>
       </TouchableOpacity>
-      <View style={styles.tableContainer}>
-        <FlatList
-          data={routesToShow}
-          renderItem={({item, index}) => (
-            <Row key={index} routeToShow={item.screen} />
-          )}
-          keyExtractor={item => item.id}
-        />
-      </View>
+      <FlatList
+        data={expressions || []}
+        renderItem={({item, index}) => (
+          <Row
+            key={index}
+            handleEdit={handleEdit}
+            handleDelete={handleDelete}
+            expression={item}
+          />
+        )}
+        keyExtractor={item => item.id}
+      />
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => {
+          navigation.navigate('Home');
+        }}>
+        <Text style={styles.textGoBack}>Calculadora</Text>
+      </TouchableOpacity>
     </View>
   );
 };

@@ -1,3 +1,4 @@
+import Colors from '../../Colors';
 import styles from './styles';
 
 const handleOnPress = (
@@ -11,6 +12,7 @@ const handleOnPress = (
   setOperation: React.Dispatch<React.SetStateAction<string>>,
   setResult: React.Dispatch<React.SetStateAction<number>>,
   setMessage: React.Dispatch<React.SetStateAction<string>>,
+  setExpression: React.Dispatch<React.SetStateAction<string>>,
 ) => {
   switch (toShow) {
     case '=':
@@ -33,6 +35,7 @@ const handleOnPress = (
         setFirstNumber,
         setSecondNumber,
         setMessage,
+        setExpression,
       );
       cleanAfterResult(setSecondNumber, setOperation);
       break;
@@ -105,37 +108,30 @@ const getResult = (
   setFirstNumber: React.Dispatch<React.SetStateAction<string>>,
   setSecondNumber: React.Dispatch<React.SetStateAction<string>>,
   setMessage: React.Dispatch<React.SetStateAction<string>>,
+  setExpression: React.Dispatch<React.SetStateAction<string>>,
 ) => {
+  let resultFormatted;
   switch (operation) {
     case '+':
-      setResult(
-        +formatDecimalResult(
-          parseFloat(firstNumber) + parseFloat(secondNumber),
-        ),
+      resultFormatted = formatDecimalResult(
+        parseFloat(firstNumber) + parseFloat(secondNumber),
       );
-      setFirstNumber(
-        formatDecimalResult(parseFloat(firstNumber) + parseFloat(secondNumber)),
-      );
+      setResult(+resultFormatted);
+      setFirstNumber(resultFormatted);
       break;
     case '-':
-      setResult(
-        +formatDecimalResult(
-          parseFloat(firstNumber) - parseFloat(secondNumber),
-        ),
+      resultFormatted = formatDecimalResult(
+        parseFloat(firstNumber) - parseFloat(secondNumber),
       );
-      setFirstNumber(
-        formatDecimalResult(parseFloat(firstNumber) - parseFloat(secondNumber)),
-      );
+      setResult(+resultFormatted);
+      setFirstNumber(resultFormatted);
       break;
     case '*':
-      setResult(
-        +formatDecimalResult(
-          parseFloat(firstNumber) * parseFloat(secondNumber),
-        ),
+      resultFormatted = formatDecimalResult(
+        parseFloat(firstNumber) * parseFloat(secondNumber),
       );
-      setFirstNumber(
-        formatDecimalResult(parseFloat(firstNumber) * parseFloat(secondNumber)),
-      );
+      setResult(+resultFormatted);
+      setFirstNumber(resultFormatted);
       break;
     case '/':
       if (secondNumber === '0') {
@@ -143,18 +139,18 @@ const getResult = (
         setMessage('No se puede dividir por cero');
         break;
       }
-      setResult(
-        +formatDecimalResult(
-          parseFloat(firstNumber) / parseFloat(secondNumber),
-        ),
+      resultFormatted = formatDecimalResult(
+        parseFloat(firstNumber) / parseFloat(secondNumber),
       );
-      setFirstNumber(
-        formatDecimalResult(parseFloat(firstNumber) / parseFloat(secondNumber)),
-      );
+      setResult(+resultFormatted);
+      setFirstNumber(resultFormatted);
       break;
     default:
       break;
   }
+  setExpression(
+    `${firstNumber} ${operation} ${secondNumber} = ${resultFormatted}`,
+  );
 };
 
 const cleanAfterResult = (
@@ -236,7 +232,7 @@ const BUTTONS = [
     isOperation: true,
     toShow: '=',
     style: {
-      backgroundColor: '#966BDE',
+      backgroundColor: Colors.violet,
     },
   },
   {
